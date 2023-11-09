@@ -23,35 +23,9 @@ const clock = new THREE.Clock();
 let cube = new ShapeGenerator("Box", [1,1,1]);
 scene.add(cube);
 
-let playerCameraController = new FirstPersonCamera(camera);
+let playerCameraController = new FirstPersonCamera(camera, 10);
 
 camera.position.z = 20;
-
-window.addEventListener("keydown", function(event){
-    switch (event.code) {
-        case "KeyW":
-            camera.position.z -= 1;
-        break;
-
-        case "KeyS":
-            camera.position.z += 1;
-        break;
-
-        case "KeyA":
-            camera.position.x -= 1;
-        break;
-
-        case "KeyD":
-            camera.position.x += 1;
-        break;
-    }
-})
-
-//offset the camera and add it to the pivot
-//you could adapt the code so that you can 'zoom' by changing the z value in camera.position in a mousewheel event..
-// let cameraDistance = 1;
-// camera.position.z = cameraDistance;
-// orbit.add( camera );
 
 scene.background = new THREE.CubeTextureLoader()
 	.setPath( 'assets/Background/' )
