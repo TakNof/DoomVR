@@ -43,7 +43,7 @@ class InputController{
 
         document.body.addEventListener("click", async () => {
             await document.body.requestPointerLock({
-                unadjustedMovement: false,
+                unadjustedMovement: true,
             });
         });
         
