@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import ObjectPhysics from "./GameLogic/Physics/ObjectPhysics.js";
 
 class ShapeGenerator extends THREE.Mesh{
     constructor(shape, data, materialType = "Basic", config = {color: 0x1EA5DC}){
@@ -7,6 +8,10 @@ class ShapeGenerator extends THREE.Mesh{
             new THREE[`Mesh${materialType}Material`](config)
         );
         this.shape = shape;
+    }
+
+    createPhysics(scene, config){
+        this.physics = new ObjectPhysics(scene, this, config);
     }
 }
 

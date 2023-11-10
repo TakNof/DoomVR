@@ -9,6 +9,7 @@ class ProceduralMapGenerator{
     #distributionMatrix;
     #buildingTextures;
     #roadTextures;
+    #items;
 
     /**
      * 
@@ -24,6 +25,7 @@ class ProceduralMapGenerator{
         this.#buildingsSize = buildingsSize;
         this.#buildingTextures = buildingTextures;
         this.#roadTextures = roadTextures;
+        this.#items = new Array();
 
         this.#amountOfBuildings = {width: 0, depth: 0, height: 0};
 
@@ -52,6 +54,10 @@ class ProceduralMapGenerator{
 
     getDistributionMatrix(){
         return this.#distributionMatrix;
+    }
+
+    getItems(){
+        return this.#items;
     }
 
     setWalls(amount){
@@ -194,14 +200,14 @@ class ProceduralMapGenerator{
                 let cube;
                 if(this.getDistributionMatrix().array[i][j] == 0){
                     cube = new ShapeGenerator(
-                        "Cube", 
+                        "Box", 
                         [this.getBuildingsSize().width, this.getBuildingsSize().height/10, this.getBuildingsSize().depth], 
                         "Standard", 
                         configRoad
                     );
                 }else{
                     cube = new ShapeGenerator(
-                        "Cube", 
+                        "Box", 
                         [this.getBuildingsSize().width, this.#rand(this.getBuildingsSize().height/2, this.getBuildingsSize().height), this.getBuildingsSize().depth], 
                         "Standard", 
                         configBuilding
@@ -211,6 +217,7 @@ class ProceduralMapGenerator{
                 cube.position.x = i * this.getBuildingsSize().width - this.getCitySize().width/2;
                 cube.position.z = j * this.getBuildingsSize().depth - this.getCitySize().depth/2;
                 cube.position.y = cube.geometry.parameters.height/2;
+                this.#items.push(cube);
                 this.getScene().add(cube);
             }
         }

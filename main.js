@@ -1,6 +1,7 @@
 import * as THREE from "three";
 
 import ShapeGenerator from "./ShapeGenerator.js";
+import ScenePhysics from "./GameLogic/Physics/ScenePhysics.js";
 
 import Player from "./GameLogic/Entities/Player.js";
 
@@ -19,20 +20,16 @@ renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 document.body.appendChild( renderer.domElement );
 
-
 const clock = new THREE.Clock();
 
 let playAnimation = true;
 
+let scenePhysics = new ScenePhysics(scene, {friction: true, energyLoss: 0.8});
+
 let player = new Player(scene, [1,1,1], "sprite", 10, 10, 100);
-player.object.position.y = 2;
+player.object.position.y = 10;
 player.setCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-
-let cube = new ShapeGenerator("Box", [1,1,1]);
-scene.add(cube);
-
-let floor = new ShapeGenerator("Box", [10,1,10], "Basic", {color: 0xFFFFFF});
-scene.add(floor);
+player.object.createPhysics(scene, {})
 
 let mapSize = {width: 200, depth: 200, height: 10};
 let wallSize = {width: 5, depth:5, height: mapSize.height};
@@ -45,6 +42,8 @@ camera.position.y = 10;
 
 let light = createLight(0xFFFFFF, 1, {x: 0, y: 50, z: 0});
 scene.add(light);
+
+scenePhysics.add(...map.getItems(), player.object);
 
 scene.background = new THREE.CubeTextureLoader()
 	.setPath( 'assets/Background/' )
@@ -71,7 +70,8 @@ function animate() {
     // renderer.render(scene, camera);
     if(playAnimation){
         player.update(clock.getDelta());
-
+        scenePhysics.checkWorldCollisions();
+        scenePhysics.update(1/1000);
     }
 }
 animate();

@@ -298,8 +298,19 @@ class Player extends Living{
         left.applyQuaternion(qx);
         left.multiplyScalar(strafeVelocity * delta * this.defaultVelocity);
 
-        this.object.position.add(forward);
-        this.object.position.add(left);
+        // this.object.position.add(forward);
+        // this.object.position.add(left);
+
+        const sum = new THREE.Vector3().addVectors(forward, left)
+
+        if(this.object.physics.config.velocityVector.length() <= sum.length()){
+            
+        }
+
+        this.object.physics.config.velocityVector.x = sum.x;
+        this.object.physics.config.velocityVector.z = sum.z;
+
+        // this.object.physics.config.velocityVector.applyAxisAngle(new THREE.Vector3(0,1,0), this.angles.phi);
 
         if(forwardVelocity != 0 || strafeVelocity != 0){
             this.camera.headBobActive = true;
