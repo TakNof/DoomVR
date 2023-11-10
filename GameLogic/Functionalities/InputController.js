@@ -1,9 +1,9 @@
 class InputController{
-    constructor(sensibility){
-        this.#initialize(sensibility);
+    constructor(cameraSensibility){
+        this.#initialize(cameraSensibility);
     }
 
-    #initialize(sensibility = 0){
+    #initialize(cameraSensibility = 0){
         this.current = {
             leftButton: false,
             rightButton: false,
@@ -21,8 +21,11 @@ class InputController{
         this.keys = {};
         this.previousKeys = {};
         this.pointerLocked = false;
-        this.mouseTimeout = null;
-        this.sensibility = sensibility;
+        this.mouseTimeout = setTimeout(() =>{
+            this.current.mouseDelta.x  = 0;
+            this.current.mouseDelta.y = 0;
+        }, 100);
+        this.cameraSensibility = cameraSensibility;
 
         this.keyCodes = {};
 
@@ -81,8 +84,8 @@ class InputController{
     onMouseMove(e){
         if(this.pointerLocked){
             clearTimeout(this.mouseTimeout);
-            this.current.mousePosition.x += e.movementX*0.1 * this.sensibility;
-            this.current.mousePosition.y += e.movementY*0.1 * this.sensibility;
+            this.current.mousePosition.x += e.movementX*0.1 * this.cameraSensibility;
+            this.current.mousePosition.y += e.movementY*0.1 * this.cameraSensibility;
 
             if(this.previous === null){
                 this.previous = JSON.parse(JSON.stringify(this.current));
@@ -95,7 +98,6 @@ class InputController{
                 this.current.mouseDelta.x  = 0;
                 this.current.mouseDelta.y = 0;
             }, 100);
-            // console.log(this.current.mouseDelta);
         }
     }
 

@@ -1,12 +1,14 @@
 import * as THREE from "three";
 
 import ShapeGenerator from "./ShapeGenerator.js";
-import FirstPersonCamera from "./GameLogic/Functionalities/FirstPersonCamera.js";
+
+import Player from "./GameLogic/Entities/Player.js";
+
+import ProceduralMapGenerator from "./GameLogic/Functionalities/ProceduralMapGenerator.js";
 
 const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
-
 const renderer = new THREE.WebGLRenderer();
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
@@ -20,12 +22,29 @@ document.body.appendChild( renderer.domElement );
 
 const clock = new THREE.Clock();
 
+let playAnimation = true;
+
+let player = new Player(scene, [1,1,1], "sprite", 10, 10, 100);
+player.object.position.y = 2;
+player.setCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+
 let cube = new ShapeGenerator("Box", [1,1,1]);
 scene.add(cube);
 
-let playerCameraController = new FirstPersonCamera(camera, 10);
+let floor = new ShapeGenerator("Box", [10,1,10], "Basic", {color: 0xFFFFFF});
+scene.add(floor);
 
-camera.position.z = 20;
+let mapSize = {width: 200, depth: 200, height: 10};
+let wallSize = {width: 5, depth:5, height: mapSize.height};
+let map = new ProceduralMapGenerator(scene, mapSize, wallSize);
+map.setWalls(50);
+map.create();
+
+camera.position.z = 10;
+camera.position.y = 10;
+
+let light = createLight(0xFFFFFF, 1, {x: 0, y: 50, z: 0});
+scene.add(light);
 
 scene.background = new THREE.CubeTextureLoader()
 	.setPath( 'assets/Background/' )
@@ -39,11 +58,21 @@ scene.background = new THREE.CubeTextureLoader()
 	]);
 
 
+window.addEventListener("keydown", function(event){
+    if(event.code == "KeyR"){
+        playAnimation = !playAnimation
+    }
+});
+
 function animate() {
 	requestAnimationFrame(animate);
 
-    renderer.render(scene, camera);
-    playerCameraController.update(clock.getDelta());
+    renderer.render(scene, player.camera);
+    // renderer.render(scene, camera);
+    if(playAnimation){
+        player.update(clock.getDelta());
+
+    }
 }
 animate();
 
