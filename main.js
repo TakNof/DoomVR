@@ -30,7 +30,7 @@ let playAnimation = true;
 
 let mainCamera = false;
 
-let scenePhysics = new ScenePhysics(scene, {friction: true, energyLoss: 0.8});
+scene.scenePhysics = new ScenePhysics(scene, {friction: true, energyLoss: 0.8});
 
 let player = new Player(scene, [1,1,1], "sprite", 10, 10, 100);
 player.object.position.y = 10;
@@ -56,7 +56,7 @@ player.object.add(camera);
 let light = createLight(0xFFFFFF, 1, {x: 0, y: 50, z: 0});
 scene.add(light);
 
-scenePhysics.add(...map.getItems(), player.object);
+scene.scenePhysics.add(...map.getItems(), player.object);
 
 scene.background = new THREE.CubeTextureLoader()
 	.setPath( 'assets/Background/' )
@@ -88,8 +88,9 @@ function animate() {
     if(mainCamera){
         target = player.object.position.clone();
 
-        target.x += camera.position.x;
-        target.y += camera.position.y;
+        // target.z += -4;
+        // target.x += camera.position.x;
+        // target.y += camera.position.y;
         
         controls.target = target;
 
@@ -101,8 +102,8 @@ function animate() {
     
     if(playAnimation){
         player.update(clock.getDelta());
-        scenePhysics.checkWorldCollisions();
-        scenePhysics.update(1/1000);
+        scene.scenePhysics.checkWorldCollisions();
+        scene.scenePhysics.update(1/1000);
     }
 }
 animate();

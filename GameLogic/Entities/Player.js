@@ -86,6 +86,10 @@ class Player extends Living{
         return this.camera;
     }
 
+    updateCamera(fov){
+        this.camera.projectionMatrix.makePerspective( fov, this.camera.aspect, this.camera.near, this.camera.far );
+    }
+
     /**
      * Sets the list of weapons of the player.
      * @param {Array<Object>} weapons
@@ -301,10 +305,11 @@ class Player extends Living{
     update(delta){
         this.input.update();
         this.camera.update(delta);
-
         this.movement(delta);
         this.jump(delta);
         this.updateWeapon();
+
+        // console.log(this.object.position);
     }
 
 
@@ -320,7 +325,6 @@ class Player extends Living{
         if(this.isSprinting()){
             sprintingVelocityMult = 1.5 ;
             this.camera.fov = this.camera.maxFov;
-            
         }else{
             this.camera.fov = this.camera.OgFov;
         }
@@ -396,7 +400,7 @@ class Player extends Living{
     jump(delta){
         const jumpAction = this.input.key(this.input.keyCodes[" "]) ? 1 : 0;
         
-        if(this.object.physics.getPotentialEnergy() < 11 && jumpAction == 1){
+        if(this.object.physics.getPotentialEnergy() < 10 && jumpAction == 1){
             
             const jumpAmount = new THREE.Vector3(0,1,0).multiplyScalar(jumpAction * delta * this.defaultVelocity);
 
@@ -409,20 +413,37 @@ class Player extends Living{
     }
 
     shoot(){
-        if(this.controls.space.isDown){
-            let time = this.getScene().time.now;
+        if(this.input.current.leftButton){
+            
+            let projectileVelocity = new THREE.Vector3(0,0,-1).applyEuler(this.object.rotation);
+            let initialPosition = this.object.position.clone().add(this.weaponObject.position);
 
-            if (time - this.lastShotTimer > this.getCurrentWeapon().getDelayBetweenShots()) {
-                this.getCurrentWeapon().shootProjectile(this, this.getCurrentWeapon().getBulletVelocity());
-                this.getHUD().setHUDElementValue("ammo", this.getCurrentWeapon().getProjectiles().countActive(false), false);
+            let projectile = new ShapeGenerator("Sphere", [0.5, 16, 32], "Standard", {color: 0xFF00FF0, roughness: 0});
+            projectile.position.copy(initialPosition);
+            projectile.createPhysics(this.scene, {velocityVector: projectileVelocity});
 
-                this.lastShotTimer = time;
-            }
+            // console.log(this.scene.scenePhysics.items[this.scene.scenePhysics.items.length - 1]);
+            this.scene.scenePhysics.items.push(projectile);
+            this.scene.add(projectile);
+           
+            
+
+            // let time = this.getScene().time.now;
+
+            // if (time - this.lastShotTimer > this.getCurrentWeapon().getDelayBetweenShots()) {
+            //     this.getCurrentWeapon().shootProjectile(this, this.getCurrentWeapon().getBulletVelocity());
+            //     this.getHUD().setHUDElementValue("ammo", this.getCurrentWeapon().getProjectiles().countActive(false), false);
+
+            //     this.lastShotTimer = time;
+            // }
+
+
         }
     }
 
     updateWeapon(){
         this.updateWeaponPosition();
+        this.shoot();
     }
 
     updateWeaponPosition(){

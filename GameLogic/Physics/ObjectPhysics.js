@@ -31,7 +31,7 @@ class ObjectPhysics{
 
         if(config){
             for(let option in config){
-                if(option == "accelerationVector" || option == "velocityVector"){
+                if(option == "accelerationVector" || option == "velocityVector" && typeof config[option] == Array){
                     this.config[option] = new THREE.Vector3().fromArray(config[option]);
                 }else{
                     this.config[option] = config[option];
