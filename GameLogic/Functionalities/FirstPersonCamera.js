@@ -19,6 +19,7 @@ class FirstPersonCamera extends THREE.PerspectiveCamera{
         }
 
         this.position.y = 0.3*Math.sin(this.headBobtimer*10) + 2;
+        this.position.x = 0.3*Math.sin(this.headBobtimer*5) + 2;
     }
 }
 

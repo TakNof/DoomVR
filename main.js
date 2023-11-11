@@ -7,9 +7,13 @@ import Player from "./GameLogic/Entities/Player.js";
 
 import ProceduralMapGenerator from "./GameLogic/Functionalities/ProceduralMapGenerator.js";
 
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
 const scene = new THREE.Scene();
 const renderer = new THREE.WebGLRenderer();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+
+const controls = new OrbitControls(camera, renderer.domElement );
 
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
@@ -24,6 +28,8 @@ const clock = new THREE.Clock();
 
 let playAnimation = true;
 
+let mainCamera = true;
+
 let scenePhysics = new ScenePhysics(scene, {friction: true, energyLoss: 0.8});
 
 let player = new Player(scene, [1,1,1], "sprite", 10, 10, 100);
@@ -37,8 +43,14 @@ let map = new ProceduralMapGenerator(scene, mapSize, wallSize);
 map.setWalls(50);
 map.create();
 
-camera.position.z = 10;
-camera.position.y = 10;
+camera.position.z = 3;
+camera.position.x = 2;
+camera.position.y = 1;
+
+let target;
+
+player.object.add(camera);
+
 
 let light = createLight(0xFFFFFF, 1, {x: 0, y: 50, z: 0});
 scene.add(light);
@@ -58,15 +70,34 @@ scene.background = new THREE.CubeTextureLoader()
 
 
 window.addEventListener("keydown", function(event){
-    if(event.code == "KeyR"){
-        playAnimation = !playAnimation
+    switch(event.code){
+        case "KeyR":
+            playAnimation = !playAnimation;
+        break;
+
+        case "KeyC":
+            mainCamera = !mainCamera;
+        break;
     }
 });
 
 function animate() {
 	requestAnimationFrame(animate);
 
-    renderer.render(scene, player.camera);
+    if(mainCamera){
+        target = player.object.position.clone();
+
+        target.x += camera.position.x;
+        target.y += camera.position.y;
+        
+        controls.target = target;
+
+        renderer.render(scene, camera);
+        controls.update();
+    }else{
+        renderer.render(scene, player.camera);
+    }
+    
     if(playAnimation){
         player.update(clock.getDelta());
         scenePhysics.checkWorldCollisions();

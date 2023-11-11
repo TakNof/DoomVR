@@ -3,6 +3,7 @@ import * as THREE from "three";
 import FirstPersonCamera from "../Functionalities/FirstPersonCamera.js";
 import InputController from "../Functionalities/InputController.js";
 import Living from "./Living.js";
+import ShapeGenerator from "../../ShapeGenerator.js";
 
  /**
  * This class extends to Living class, due the "living" sprites could be
@@ -26,6 +27,7 @@ class Player extends Living{
         this.input = new InputController(cameraSensibility);
 
         this.setMaxHealth(maxHealth);
+        this.setWeaponObject();
 
         // this.setSpriteSounds("player", "hurt", "death", "heal");
 
@@ -104,6 +106,15 @@ class Player extends Living{
     //     }
     //     this.setCurrentWeapon(this.weapons[0]);        
     // }
+
+
+    setWeaponObject(){
+        this.weaponObject = new ShapeGenerator("Box", [0.5, 0.5, 2], "Standard");
+        this.object.add(this.weaponObject);
+
+        this.weaponObject.position.z = -3;
+        this.weaponObject.position.x = 2;
+    }
 
     /**
      * Gets the list of weapons of the player.
@@ -330,6 +341,8 @@ class Player extends Living{
 
         if(forwardVelocity != 0 || strafeVelocity != 0){
             this.camera.headBobActive = true;
+        }else{
+            this.camera.position.fromArray([0,this.object.geometry.parameters.height,0]);
         }
     }
 
@@ -381,18 +394,18 @@ class Player extends Living{
         return this.input.key(this.input.keyCodes[this.input.keyCodesFromCode[16]]);
     }
 
-    // shoot(){
-    //     if(this.controls.space.isDown){
-    //         let time = this.getScene().time.now;
+    shoot(){
+        if(this.controls.space.isDown){
+            let time = this.getScene().time.now;
 
-    //         if (time - this.lastShotTimer > this.getCurrentWeapon().getDelayBetweenShots()) {
-    //             this.getCurrentWeapon().shootProjectile(this, this.getCurrentWeapon().getBulletVelocity());
-    //             this.getHUD().setHUDElementValue("ammo", this.getCurrentWeapon().getProjectiles().countActive(false), false);
+            if (time - this.lastShotTimer > this.getCurrentWeapon().getDelayBetweenShots()) {
+                this.getCurrentWeapon().shootProjectile(this, this.getCurrentWeapon().getBulletVelocity());
+                this.getHUD().setHUDElementValue("ammo", this.getCurrentWeapon().getProjectiles().countActive(false), false);
 
-    //             this.lastShotTimer = time;
-    //         }
-    //     }
-    // }
+                this.lastShotTimer = time;
+            }
+        }
+    }
 
     // /**
     //  * Allow the player to switch among the weapons.
