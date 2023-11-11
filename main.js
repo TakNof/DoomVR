@@ -28,7 +28,7 @@ let scenePhysics = new ScenePhysics(scene, {friction: true, energyLoss: 0.8});
 
 let player = new Player(scene, [1,1,1], "sprite", 10, 10, 100);
 player.object.position.y = 10;
-player.setCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+player.setCamera(75, 90, window.innerWidth / window.innerHeight, 0.1, 1000);
 player.object.createPhysics(scene, {})
 
 let mapSize = {width: 200, depth: 200, height: 10};

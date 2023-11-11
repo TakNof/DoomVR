@@ -32,6 +32,8 @@ class Player extends Living{
         this.damageDealed = 0;
         this.damageReceived = 0;
         this.lastSwitchWeaponTimer = 0;
+        this.sprinting = false;
+
         // this.creationTime = this.getScene().time.now;
     }
 
@@ -64,8 +66,11 @@ class Player extends Living{
      * Sets the camera of the player.
      * @param {number} fov in radians.
      */
-    setCamera(fov, aspect, near, far){
+    setCamera(fov, maxFov, aspect, near, far){
         this.camera = new FirstPersonCamera(fov, aspect, near, far, [0,this.object.geometry.parameters.height,0]);
+        this.camera.OgFov = fov;
+        this.camera.maxFov = maxFov;
+        // this.camera.fovLinspace = this.linspace(fov, maxFov, 0.01);
         this.object.add(this.camera);
     }
 
@@ -288,25 +293,35 @@ class Player extends Living{
         
         const strafeVelocity = (this.input.key(this.input.keyCodes.A) ? 1 : 0) + (this.input.key(this.input.keyCodes.D) ? -1 : 0);
 
+        let sprintingVelocityMult = 1; 
+
+        // console.log(this.sprinting);
+
+        if(this.isSprinting()){
+            sprintingVelocityMult = 1.5 ;
+            this.camera.fov = this.camera.maxFov;
+            
+        }else{
+            this.camera.fov = this.camera.OgFov;
+        }
+
+        this.camera.updateProjectionMatrix();
+
         const qx = new THREE.Quaternion();
         qx.setFromAxisAngle(new THREE.Vector3(0,1,0), this.angles.phi);
 
         const forward = new THREE.Vector3(0,0,-1);
         forward.applyQuaternion(qx);
-        forward.multiplyScalar(forwardVelocity * delta * this.defaultVelocity);
+        forward.multiplyScalar(forwardVelocity * delta * this.defaultVelocity * sprintingVelocityMult);
 
         const left = new THREE.Vector3(-1,0,0);
         left.applyQuaternion(qx);
-        left.multiplyScalar(strafeVelocity * delta * this.defaultVelocity);
+        left.multiplyScalar(strafeVelocity * delta * this.defaultVelocity * sprintingVelocityMult);
 
         // this.object.position.add(forward);
         // this.object.position.add(left);
 
         const sum = new THREE.Vector3().addVectors(forward, left)
-
-        if(this.object.physics.config.velocityVector.length() <= sum.length()){
-            
-        }
 
         this.object.physics.config.velocityVector.x = sum.x;
         this.object.physics.config.velocityVector.z = sum.z;
@@ -354,19 +369,16 @@ class Player extends Living{
     jump(delta){
         const jumpAction = this.input.key(this.input.keyCodes[" "]) ? 1 : 0;
         
-        // if(this.object.physics.getPotentialEnergy() < 0.1){
-        //     const jumpAmount = new THREE.Vector3(0,1,0).multiplyScalar(jumpAction * delta * this.defaultVelocity);
-
-        //     this.object.physics.config.velocityVector.y = jumpAmount.y;
-        // }
-
-        console.log(this.object.physics.getPotentialEnergy());
         if(this.object.physics.getPotentialEnergy() < 11 && jumpAction == 1){
             
             const jumpAmount = new THREE.Vector3(0,1,0).multiplyScalar(jumpAction * delta * this.defaultVelocity);
 
             this.object.physics.config.velocityVector.y = jumpAmount.y;
         }
+    }
+
+    isSprinting(){
+        return this.input.key(this.input.keyCodes[this.input.keyCodesFromCode[16]]);
     }
 
     // shoot(){
@@ -426,6 +438,23 @@ class Player extends Living{
     //         this.getHUD().setHUDElementValue("ammo", this.getCurrentWeapon().getProjectiles().countActive(false), false);
     //     }
     // }
+
+    linspace(start, end, jump = 0.2){
+        let totalData = Math.abs(end - start);
+        totalData /= jump;
+    
+        let list = [];
+    
+        let value = start;
+        while(list.length <= totalData){
+            list.push( value );
+            value += jump;
+        }
+        
+        list.push(end);
+    
+        return list;
+    }
 }
 
 export default Player;

@@ -28,11 +28,13 @@ class InputController{
         this.cameraSensibility = cameraSensibility;
 
         this.keyCodes = {};
+        this.keyCodesFromCode = {};
 
         for (let i = 0; i < 128; i++) {
             let char = String.fromCharCode(i);
 
             this.keyCodes[char] = i;
+            this.keyCodesFromCode[i] = char;
         }
 
         let events = ["MouseDown", "MouseUp", "MouseMove", "KeyDown", "KeyUp"];
@@ -102,6 +104,9 @@ class InputController{
     }
 
     onKeyDown(e){
+        // console.log(this.keyCodesFromCode[e.keyCode]);
+        // console.log(this.keyCodes[this.keyCodesFromCode[e.keyCode]]);
+        // console.log(this.keyCodesFromCode[this.keys[e.keyCode]]);
         this.keys[e.keyCode] = true;
     }
 
