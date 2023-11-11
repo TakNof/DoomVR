@@ -114,7 +114,7 @@ class ScenePhysics{
         let colliding = distance.length() <= (item1.geometry.parameters.radius + item2.geometry.parameters.radius);
         
         if(colliding){
-            console.log(`Spheres colliding: ${item1.shape} ${item2.shape}`);
+            // console.log(`Spheres colliding: ${item1.shape} ${item2.shape}`);
 
             let itemsVels = {item1Vel: 1, item2Vel: 1};
 
@@ -157,7 +157,7 @@ class ScenePhysics{
             let collisions = this.boxCollisionBounds(item1, item2);
             for(let [i, axis] of ["x", "y", "z"].entries()){
                 if(face.normal[axis] != 0 && collisions[i]){
-                    console.log(`Sphere colliding with box: ${item1.shape} ${item2.shape}`);
+                    // console.log(`Sphere colliding with box: ${item1.shape} ${item2.shape}`);
                     item1.physics.config.velocityVector[axis] *= -(Math.abs(face.normal[axis]) - this.config.energyLoss)*Math.cos(item2.rotation[this.complementaryAxels[this.axles.indexOf(axis)]]);
 
                     if(axis == "y" && face.normal.y > 0){
@@ -180,7 +180,7 @@ class ScenePhysics{
             let collisions = this.boxCollisionBounds(item1, item2);
             for(let [i, axis] of ["x", "y", "z"].entries()){
                 if(face.normal[axis] != 0 && collisions[i]){
-                    console.log(`Box colliding with box: ${item1.shape} ${item2.shape}`);
+                    // console.log(`Box colliding with box: ${item1.shape} ${item2.shape}`);
                     item1.physics.config.velocityVector[axis] *= -(Math.abs(face.normal[axis]) - this.config.energyLoss);
 
                         if(axis == "y" && face.normal.y > 0){

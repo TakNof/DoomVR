@@ -278,6 +278,7 @@ class Player extends Living{
     update(delta){
         this.input.update();
         this.movement(delta);
+        this.jump(delta);
         this.camera.update(delta, this.object.rotation);
     }
 
@@ -348,6 +349,24 @@ class Player extends Living{
     movement(delta){
         this.updateTranslation(delta);
         this.updateRotation(delta);
+    }
+
+    jump(delta){
+        const jumpAction = this.input.key(this.input.keyCodes[" "]) ? 1 : 0;
+        
+        // if(this.object.physics.getPotentialEnergy() < 0.1){
+        //     const jumpAmount = new THREE.Vector3(0,1,0).multiplyScalar(jumpAction * delta * this.defaultVelocity);
+
+        //     this.object.physics.config.velocityVector.y = jumpAmount.y;
+        // }
+
+        console.log(this.object.physics.getPotentialEnergy());
+        if(this.object.physics.getPotentialEnergy() < 11 && jumpAction == 1){
+            
+            const jumpAmount = new THREE.Vector3(0,1,0).multiplyScalar(jumpAction * delta * this.defaultVelocity);
+
+            this.object.physics.config.velocityVector.y = jumpAmount.y;
+        }
     }
 
     // shoot(){

@@ -67,7 +67,6 @@ function animate() {
 	requestAnimationFrame(animate);
 
     renderer.render(scene, player.camera);
-    // renderer.render(scene, camera);
     if(playAnimation){
         player.update(clock.getDelta());
         scenePhysics.checkWorldCollisions();
