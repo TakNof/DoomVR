@@ -28,14 +28,15 @@ const clock = new THREE.Clock();
 
 let playAnimation = true;
 
-let mainCamera = true;
+let mainCamera = false;
 
 let scenePhysics = new ScenePhysics(scene, {friction: true, energyLoss: 0.8});
 
 let player = new Player(scene, [1,1,1], "sprite", 10, 10, 100);
 player.object.position.y = 10;
 player.setCamera(75, 90, window.innerWidth / window.innerHeight, 0.1, 1000);
-player.object.createPhysics(scene, {})
+player.setWeaponObject([1, player.object.geometry.parameters.height*0.5, -2]);
+player.object.createPhysics(scene, {});
 
 let mapSize = {width: 200, depth: 200, height: 10};
 let wallSize = {width: 5, depth:5, height: mapSize.height};

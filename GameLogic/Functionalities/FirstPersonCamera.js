@@ -4,12 +4,14 @@ class FirstPersonCamera extends THREE.PerspectiveCamera{
     constructor(fov, aspect, near, far, position){
         super(fov, aspect, near, far);
         this.position.fromArray(position);
+        this.inMovement = false;
+
         this.headBobActive = false;
         this.headBobtimer = 0;
     }
 
-    update(delta, rotation){
-        this.updateHeadBob(delta);
+    update(delta, isMoving){
+        this.updateHeadBob(delta, isMoving);
     }
     
     updateHeadBob(delta){
@@ -17,9 +19,11 @@ class FirstPersonCamera extends THREE.PerspectiveCamera{
             this.headBobtimer += delta;
             this.headBobActive = false;
         }
-
-        this.position.y = 0.3*Math.sin(this.headBobtimer*10) + 2;
-        this.position.x = 0.3*Math.sin(this.headBobtimer*5) + 2;
+        
+        if(this.inMovement){
+            this.position.y = 0.3*Math.sin(this.headBobtimer*10) + 2;
+            this.position.x = 0.3*Math.cos(this.headBobtimer*5);
+        }
     }
 }
 

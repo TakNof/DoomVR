@@ -27,7 +27,6 @@ class Player extends Living{
         this.input = new InputController(cameraSensibility);
 
         this.setMaxHealth(maxHealth);
-        this.setWeaponObject();
 
         // this.setSpriteSounds("player", "hurt", "death", "heal");
 
@@ -69,11 +68,14 @@ class Player extends Living{
      * @param {number} fov in radians.
      */
     setCamera(fov, maxFov, aspect, near, far){
-        this.camera = new FirstPersonCamera(fov, aspect, near, far, [0,this.object.geometry.parameters.height,0]);
+        this.camera = new FirstPersonCamera(fov, aspect, near, far, [0, this.object.geometry.parameters.height, 0]);
         this.camera.OgFov = fov;
         this.camera.maxFov = maxFov;
         // this.camera.fovLinspace = this.linspace(fov, maxFov, 0.01);
         this.object.add(this.camera);
+
+        this.cameraHelper = new THREE.CameraHelper( this.camera );
+        this.scene.add(this.cameraHelper);
     }
 
     /**
@@ -107,13 +109,18 @@ class Player extends Living{
     //     this.setCurrentWeapon(this.weapons[0]);        
     // }
 
-
-    setWeaponObject(){
+    /**
+     * Sets the weapon Mesh of the player to display the sprites.
+     * @param {[...Number]} Position
+     */
+    setWeaponObject(position = [0,0,0]){
         this.weaponObject = new ShapeGenerator("Box", [0.5, 0.5, 2], "Standard");
         this.object.add(this.weaponObject);
 
-        this.weaponObject.position.z = -3;
-        this.weaponObject.position.x = 2;
+        this.weaponObject.defaultPosition = new THREE.Vector3().fromArray(position);
+        this.weaponObject.aimingPosition = new THREE.Vector3(0, this.object.geometry.parameters.height*0.8, position[2]);
+
+        this.weaponObject.position.copy(this.weaponObject.defaultPosition);
     }
 
     /**
@@ -293,9 +300,11 @@ class Player extends Living{
 
     update(delta){
         this.input.update();
+        this.camera.update(delta);
+
         this.movement(delta);
         this.jump(delta);
-        this.camera.update(delta, this.object.rotation);
+        this.updateWeapon();
     }
 
 
@@ -339,10 +348,15 @@ class Player extends Living{
 
         // this.object.physics.config.velocityVector.applyAxisAngle(new THREE.Vector3(0,1,0), this.angles.phi);
 
+
+
         if(forwardVelocity != 0 || strafeVelocity != 0){
             this.camera.headBobActive = true;
+            this.camera.inMovement = true;
         }else{
-            this.camera.position.fromArray([0,this.object.geometry.parameters.height,0]);
+            this.camera.inMovement = false;
+            this.camera.headBobtimer = 0;
+            this.camera.position.set(0, this.object.geometry.parameters.height, 0);
         }
     }
 
@@ -404,6 +418,18 @@ class Player extends Living{
 
                 this.lastShotTimer = time;
             }
+        }
+    }
+
+    updateWeapon(){
+        this.updateWeaponPosition();
+    }
+
+    updateWeaponPosition(){
+        if(this.input.current.rightButton){
+            this.weaponObject.position.copy(this.weaponObject.aimingPosition);
+        }else{
+            this.weaponObject.position.copy(this.weaponObject.defaultPosition);
         }
     }
 

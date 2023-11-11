@@ -25,6 +25,7 @@ class InputController{
             this.current.mouseDelta.x  = 0;
             this.current.mouseDelta.y = 0;
         }, 100);
+
         this.cameraSensibility = cameraSensibility;
 
         this.keyCodes = {};
@@ -57,7 +58,7 @@ class InputController{
     key(keyCode){
         return this.keys[keyCode];
     }
-
+    
     onMouseDown(e){
         // console.log("onMouseDown")
         switch(e.button){
@@ -104,9 +105,6 @@ class InputController{
     }
 
     onKeyDown(e){
-        // console.log(this.keyCodesFromCode[e.keyCode]);
-        // console.log(this.keyCodes[this.keyCodesFromCode[e.keyCode]]);
-        // console.log(this.keyCodesFromCode[this.keys[e.keyCode]]);
         this.keys[e.keyCode] = true;
     }
 
