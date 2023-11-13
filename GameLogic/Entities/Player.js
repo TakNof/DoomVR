@@ -402,7 +402,7 @@ class Player extends Living{
         
         if(this.object.physics.getPotentialEnergy() < 10 && jumpAction == 1){
             
-            const jumpAmount = new THREE.Vector3(0,1,0).multiplyScalar(jumpAction * delta * this.defaultVelocity);
+            const jumpAmount = new THREE.Vector3(0,1,0).multiplyScalar(jumpAction * delta * this.defaultVelocity*2);
 
             this.object.physics.config.velocityVector.y = jumpAmount.y;
         }
@@ -412,15 +412,12 @@ class Player extends Living{
         return this.input.key(this.input.keyCodes[this.input.keyCodesFromCode[16]]);
     }
 
-    shoot(delta){
+    shoot(){
         if(this.input.current.leftButton){
             
             let time = this.scene.scenePhysics.config.currentTime;
 
-            console.log(time);
-
-            if (time - this.getLastShotTimer() > 0.01) {
-                console.log("shooting");
+            if (time - this.getLastShotTimer() > 0.05) {
                 let projectileVelocity = new THREE.Vector3(0,0,-0.1).applyEuler(this.object.rotation);
                 let initialPosition = this.object.position.clone().add(this.weaponObject.position);
 

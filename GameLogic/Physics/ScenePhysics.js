@@ -20,7 +20,8 @@ class ScenePhysics{
             collitionOn: true,
             bounce: true,
             viewMovementHelper: false,
-            currentTime: 0
+            currentTime: 0,
+            delta: 0
         }
 
         if(config){
@@ -48,10 +49,11 @@ class ScenePhysics{
     update(divisor){
         this.items.forEach((item) =>{
             if(item.physics){
-                item.physics.move(divisor);
+                item.physics.move();
             }
         });
 
+        this.config.delta = divisor;
         this.config.currentTime += divisor;
     }
 

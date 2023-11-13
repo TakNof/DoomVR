@@ -30,7 +30,7 @@ let playAnimation = true;
 
 let mainCamera = false;
 
-scene.scenePhysics = new ScenePhysics(scene, {energyLoss: 0.2});
+scene.scenePhysics = new ScenePhysics(scene, {energyLoss: 0.8});
 
 let player = new Player(scene, [1,1,1], "sprite", 10, 10, 100);
 player.object.position.y = 10;
@@ -103,7 +103,7 @@ function animate() {
     if(playAnimation){
         player.update(clock.getDelta());
         scene.scenePhysics.checkWorldCollisions();
-        scene.scenePhysics.update(clock.getDelta()/10);
+        scene.scenePhysics.update(clock.getDelta()/5);
     }
 }
 animate();

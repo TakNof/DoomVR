@@ -115,16 +115,16 @@ class ObjectPhysics{
         return collition;
     }; 
 
-    move(divisor){
+    move(){
         this.setKineticEnergy();
         this.setPotentialEnergy();
         this.setMomentum();
 
         if(Math.abs(this.config.gravity)> 0){
-            this.gravityMovement(divisor);
+            this.gravityMovement();
         }
         
-        this.generalMovement(divisor);
+        this.generalMovement();
         
         if(this.arrowHelper){
             this.getArrowHelper().position.set(this.object.position.x, this.object.position.y, this.object.position.z);
@@ -138,9 +138,9 @@ class ObjectPhysics{
         }
     }
 
-    gravityMovement(divisor){
+    gravityMovement(){
         if(!this.minimalGroundDistance()){
-            this.getVelocityVector().y += this.config.accelerationVector.y*divisor;
+            this.getVelocityVector().y += this.config.accelerationVector.y*this.scene.scenePhysics.config.delta;
             this.object.position.y += this.getVelocityVector().y;
         }else{
             // console.log("canceling speed");
@@ -152,14 +152,14 @@ class ObjectPhysics{
             this.getVelocityVector().z *= (0.99);
         }
         
-        // this.getVelocityVector().y += this.config.accelerationVector.y*divisor;
+        // this.getVelocityVector().y += this.config.accelerationVector.y*this.scene.scenePhysics.config.delta;
         // this.object.position.y += this.getVelocityVector().y;
     }
 
-    generalMovement(divisor){
+    generalMovement(){
         if(!this.minimalWallDistance()){
-            this.getVelocityVector().x += this.config.accelerationVector.x*divisor;
-            this.getVelocityVector().z += this.config.accelerationVector.z*divisor;
+            this.getVelocityVector().x += this.config.accelerationVector.x*this.scene.scenePhysics.config.delta;
+            this.getVelocityVector().z += this.config.accelerationVector.z*this.scene.scenePhysics.config.delta;
 
             this.object.position.x += this.getVelocityVector().x;
             this.object.position.z += this.getVelocityVector().z;
