@@ -307,7 +307,7 @@ class Player extends Living{
         this.camera.update(delta);
         this.movement(delta);
         this.jump(delta);
-        this.updateWeapon();
+        this.updateWeapon(delta);
 
         // console.log(this.object.position);
     }
@@ -412,38 +412,33 @@ class Player extends Living{
         return this.input.key(this.input.keyCodes[this.input.keyCodesFromCode[16]]);
     }
 
-    shoot(){
+    shoot(delta){
         if(this.input.current.leftButton){
             
-            let projectileVelocity = new THREE.Vector3(0,0,-1).applyEuler(this.object.rotation);
-            let initialPosition = this.object.position.clone().add(this.weaponObject.position);
+            let time = this.scene.scenePhysics.config.currentTime;
 
-            let projectile = new ShapeGenerator("Sphere", [0.5, 16, 32], "Standard", {color: 0xFF00FF0, roughness: 0});
-            projectile.position.copy(initialPosition);
-            projectile.createPhysics(this.scene, {velocityVector: projectileVelocity});
+            console.log(time);
 
-            // console.log(this.scene.scenePhysics.items[this.scene.scenePhysics.items.length - 1]);
-            this.scene.scenePhysics.items.push(projectile);
-            this.scene.add(projectile);
-           
-            
+            if (time - this.getLastShotTimer() > 0.01) {
+                console.log("shooting");
+                let projectileVelocity = new THREE.Vector3(0,0,-0.1).applyEuler(this.object.rotation);
+                let initialPosition = this.object.position.clone().add(this.weaponObject.position);
 
-            // let time = this.getScene().time.now;
+                let projectile = new ShapeGenerator("Sphere", [0.1, 16, 32], "Standard", {color: 0xFF00FF0, roughness: 0});
+                projectile.position.copy(initialPosition);
+                projectile.createPhysics(this.scene, {velocityVector: projectileVelocity});
 
-            // if (time - this.lastShotTimer > this.getCurrentWeapon().getDelayBetweenShots()) {
-            //     this.getCurrentWeapon().shootProjectile(this, this.getCurrentWeapon().getBulletVelocity());
-            //     this.getHUD().setHUDElementValue("ammo", this.getCurrentWeapon().getProjectiles().countActive(false), false);
+                this.scene.scenePhysics.items.push(projectile);
+                this.scene.add(projectile);
 
-            //     this.lastShotTimer = time;
-            // }
-
-
+                this.setLastShotTimer(time);
+            }
         }
     }
 
-    updateWeapon(){
+    updateWeapon(delta){
         this.updateWeaponPosition();
-        this.shoot();
+        this.shoot(delta);
     }
 
     updateWeaponPosition(){

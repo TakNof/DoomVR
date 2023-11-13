@@ -112,8 +112,49 @@ class InputController{
         this.keys[e.keyCode] = false;
     }
 
+    checkGamepad(){
+        for(let gamepad of navigator.getGamepads()){
+            if(gamepad){
+                this.gamepad = gamepad;
+                this.gamepad.inputTranslator = {
+                    0: 32,
+                    12: 87,
+                    13: 83,
+                    14: 65,
+                    15: 68,
+                    10: 16,
+                    7: "leftButton",
+                    6: "rightButton"
+                }
+            }
+        }
+        this.getGamepads = null;
+    }
+
+    gamepadController(){
+        if(this.gamepad){
+            for(let [i, button] of this.gamepad.buttons.entries()){
+                if(button.pressed && this.gamepad.inputTranslator[i] != null){
+                    if(i >= 6 && i <= 7){
+                        this.current[this.gamepad.inputTranslator[i]] = true;
+                    }else{
+                        this.keys[this.gamepad.inputTranslator[i]] = true;
+                    }
+                }else{
+                    if(i >= 6 && i <= 7){
+                        this.current[this.gamepad.inputTranslator[i]] = false;
+                    }else{
+                        this.keys[this.gamepad.inputTranslator[i]] = false;
+                    }
+                }
+            }
+        }
+    }
+
     update(){
         this.previous = JSON.parse(JSON.stringify(this.current));
+        this.checkGamepad();
+        this.gamepadController();
     }
 }
 

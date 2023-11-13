@@ -19,7 +19,8 @@ class ScenePhysics{
             momentum: true,
             collitionOn: true,
             bounce: true,
-            viewMovementHelper: false
+            viewMovementHelper: false,
+            currentTime: 0
         }
 
         if(config){
@@ -50,6 +51,8 @@ class ScenePhysics{
                 item.physics.move(divisor);
             }
         });
+
+        this.config.currentTime += divisor;
     }
 
     remove(item){
