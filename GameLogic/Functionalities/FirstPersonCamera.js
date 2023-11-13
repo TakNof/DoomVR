@@ -5,6 +5,7 @@ class FirstPersonCamera extends THREE.PerspectiveCamera{
         super(fov, aspect, near, far);
         this.position.fromArray(position);
         this.inMovement = false;
+        this.sprintingMultiplier = 1;
 
         this.headBobActive = false;
         this.headBobtimer = 0;
@@ -21,8 +22,8 @@ class FirstPersonCamera extends THREE.PerspectiveCamera{
         }
         
         if(this.inMovement){
-            this.position.y = 0.3*Math.sin(this.headBobtimer*10) + 2;
-            this.position.x = 0.3*Math.cos(this.headBobtimer*5);
+            this.position.y = 0.3*Math.sin(this.headBobtimer*5*this.sprintingMultiplier) + 2;
+            this.position.x = 0.3*Math.cos(this.headBobtimer*2.5*this.sprintingMultiplier);
         }
     }
 }

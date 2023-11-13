@@ -1,9 +1,9 @@
 class InputController{
-    constructor(cameraSensibility){
-        this.#initialize(cameraSensibility);
+    constructor(giroscopeObject, cameraSensibility){
+        this.#initialize(giroscopeObject, cameraSensibility);
     }
 
-    #initialize(cameraSensibility = 0){
+    #initialize(giroscopeObject, cameraSensibility = 0){
         this.current = {
             leftButton: false,
             rightButton: false,
@@ -38,11 +38,7 @@ class InputController{
             this.keyCodesFromCode[i] = char;
         }
 
-        this.giroscopeControls =  new THREE.DeviceOrientationControls(this.object);
-
-        if(this.giroscopeControls.device == null){
-            this.giroscopeControls.enabled = false;
-        }
+        this.createGiroscope(giroscopeObject);
 
         let events = ["MouseDown", "MouseUp", "MouseMove", "KeyDown", "KeyUp"];
 
@@ -154,6 +150,14 @@ class InputController{
                     }
                 }
             }
+        }
+    }
+
+    createGiroscope(giroscopeObject){
+        this.giroscopeControls =  new THREE.DeviceOrientationControls(giroscopeObject);
+
+        if(this.giroscopeControls.device == null){
+            this.giroscopeControls.enabled = false;
         }
     }
 

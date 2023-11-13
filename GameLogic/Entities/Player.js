@@ -5,6 +5,7 @@ import InputController from "../Functionalities/InputController.js";
 import Living from "./Living.js";
 import ShapeGenerator from "../../ShapeGenerator.js";
 
+
  /**
  * This class extends to Living class, due the "living" sprites could be
  * players or enemies. Furthermore, this class implements all the movement controlers for the player/s.
@@ -24,7 +25,7 @@ class Player extends Living{
     constructor(scene, originInfo, spriteImgStr, defaultVelocity, cameraSensibility, maxHealth){
         super(scene, originInfo, spriteImgStr, defaultVelocity);
 
-        this.input = new InputController(cameraSensibility);
+        this.input = new InputController(this.object, cameraSensibility);
 
         this.setMaxHealth(maxHealth);
 
@@ -320,14 +321,14 @@ class Player extends Living{
 
         let sprintingVelocityMult = 1; 
 
-        // console.log(this.sprinting);
-
         if(this.isSprinting()){
-            sprintingVelocityMult = 1.5 ;
+            sprintingVelocityMult = 1.5;
             this.camera.fov = this.camera.maxFov;
         }else{
             this.camera.fov = this.camera.OgFov;
         }
+
+        this.camera.sprintingMultiplier = sprintingVelocityMult;
 
         this.camera.updateProjectionMatrix();
 
