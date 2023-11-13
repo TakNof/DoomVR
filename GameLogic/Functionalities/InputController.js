@@ -38,6 +38,12 @@ class InputController{
             this.keyCodesFromCode[i] = char;
         }
 
+        this.giroscopeControls =  new THREE.DeviceOrientationControls(this.object);
+
+        if(this.giroscopeControls.device == null){
+            this.giroscopeControls.enabled = false;
+        }
+
         let events = ["MouseDown", "MouseUp", "MouseMove", "KeyDown", "KeyUp"];
 
         for(let event of events){
@@ -155,6 +161,10 @@ class InputController{
         this.previous = JSON.parse(JSON.stringify(this.current));
         this.checkGamepad();
         this.gamepadController();
+
+        if(this.giroscopeControls.enabled){
+            this.giroscopeControls.update();
+        }
     }
 }
 

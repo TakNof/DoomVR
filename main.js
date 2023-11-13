@@ -9,6 +9,8 @@ import ProceduralMapGenerator from "./GameLogic/Functionalities/ProceduralMapGen
 
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
+import { StereoEffect } from 'three/addons/effects/StereoEffect.js';
+
 const scene = new THREE.Scene();
 const renderer = new THREE.WebGLRenderer();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -24,6 +26,8 @@ renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 document.body.appendChild( renderer.domElement );
 
+let currentRenderer = renderer;
+
 const clock = new THREE.Clock();
 
 let playAnimation = true;
@@ -37,6 +41,13 @@ player.object.position.y = 10;
 player.setCamera(75, 90, window.innerWidth / window.innerHeight, 0.1, 1000);
 player.setWeaponObject([1, player.object.geometry.parameters.height*0.5, -2]);
 player.object.createPhysics(scene, {});
+
+if(player.input.giroscopeControls.enabled){
+    const stereoEffect = new StereoEffect(renderer);
+    stereoEffect.eyeSeparation = 0.06;
+
+    currentRenderer = stereoEffect;
+}
 
 let mapSize = {width: 200, depth: 200, height: 10};
 let wallSize = {width: 5, depth:5, height: mapSize.height};
@@ -88,22 +99,22 @@ function animate() {
     if(mainCamera){
         target = player.object.position.clone();
 
-        // target.z += -4;
+        target.z += -4;
         // target.x += camera.position.x;
         // target.y += camera.position.y;
         
         controls.target = target;
 
-        renderer.render(scene, camera);
+        currentRenderer.render(scene, camera);
         controls.update();
     }else{
-        renderer.render(scene, player.camera);
+        currentRenderer.render(scene, player.camera);
     }
     
     if(playAnimation){
-        player.update(clock.getDelta());
+        player.update(clock.getDelta()*2);
         scene.scenePhysics.checkWorldCollisions();
-        scene.scenePhysics.update(clock.getDelta()/5);
+        scene.scenePhysics.update(clock.getDelta()*0.5);
     }
 }
 animate();
