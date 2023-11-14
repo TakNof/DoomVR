@@ -10,6 +10,7 @@ THREE.DeviceOrientationControls = function ( player ) {
 
 	this.enabled = true;
 
+	this.device = null;
 	this.deviceOrientation = {};
 	this.screenOrientation = 0;
 
@@ -95,15 +96,15 @@ THREE.DeviceOrientationControls = function ( player ) {
 
 		if ( scope.enabled === false ) return;
 
-		var device = scope.deviceOrientation;
+		scope.device = scope.deviceOrientation;
 
-		if ( device ) {
+		if ( scope.device ) {
 
-			var alpha = device.alpha ? THREE.MathUtils.degToRad( device.alpha ) + scope.alphaOffset : 0; // Z
+			var alpha = scope.device.alpha ? THREE.MathUtils.degToRad( scope.device.alpha ) + scope.alphaOffset : 0; // Z
 
-			var beta = device.beta ? THREE.MathUtils.degToRad( device.beta ) : 0; // X'
+			var beta = scope.device.beta ? THREE.MathUtils.degToRad( scope.device.beta ) : 0; // X'
 
-			var gamma = device.gamma ? THREE.MathUtils.degToRad( device.gamma ) : 0; // Y''
+			var gamma = scope.device.gamma ? THREE.MathUtils.degToRad( scope.device.gamma ) : 0; // Y''
 
 			var orient = scope.screenOrientation ? THREE.MathUtils.degToRad( scope.screenOrientation ) : 0; // O
 
