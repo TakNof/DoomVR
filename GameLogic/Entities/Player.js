@@ -366,7 +366,7 @@ class Player extends Living{
     }
 
     updateRotation(delta){
-        if(!player.input.giroscopeControls.enabled){
+        if(!this.input.giroscopeControls.enabled){
             const xh = this.input.current.mouseDelta.x / window.innerWidth;
             const yh = this.input.current.mouseDelta.y / window.innerHeight;
 
