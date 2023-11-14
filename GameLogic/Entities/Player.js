@@ -366,23 +366,28 @@ class Player extends Living{
     }
 
     updateRotation(delta){
-        const xh = this.input.current.mouseDelta.x / window.innerWidth;
-        const yh = this.input.current.mouseDelta.y / window.innerHeight;
+        if(!player.input.giroscopeControls.enabled){
+            const xh = this.input.current.mouseDelta.x / window.innerWidth;
+            const yh = this.input.current.mouseDelta.y / window.innerHeight;
 
-        this.angles.phi += -xh * 1;
-        this.angles.theta = this.clamp(this.angles.theta + -yh * 1, -Math.PI/3, Math.PI/3);
+            this.angles.phi += -xh * 1;
+            this.angles.theta = this.clamp(this.angles.theta + -yh * 1, -Math.PI/3, Math.PI/3);
 
-        const qx = new THREE.Quaternion();
-        qx.setFromAxisAngle(new THREE.Vector3(0,1,0), this.angles.phi);
+            const qx = new THREE.Quaternion();
+            qx.setFromAxisAngle(new THREE.Vector3(0,1,0), this.angles.phi);
 
-        const qz = new THREE.Quaternion();
-        qz.setFromAxisAngle(new THREE.Vector3(1,0,0), this.angles.theta);
+            const qz = new THREE.Quaternion();
+            qz.setFromAxisAngle(new THREE.Vector3(1,0,0), this.angles.theta);
 
-        const q = new THREE.Quaternion();
-        q.multiply(qx);
-        q.multiply(qz);
+            const q = new THREE.Quaternion();
+            q.multiply(qx);
+            q.multiply(qz);
 
-        this.object.quaternion.copy(q);
+            this.object.quaternion.copy(q);
+        }else{
+            this.angles.phi = this.input.giroscopeControls.alpha;
+            this.angles.theta = this.input.giroscopeControls.beta;
+        }
     }
 
     clamp(val, min, max){
@@ -395,7 +400,7 @@ class Player extends Living{
      */
     movement(delta){
         this.updateTranslation(delta);
-        // this.updateRotation(delta);
+        this.updateRotation(delta);
     }
 
     jump(delta){

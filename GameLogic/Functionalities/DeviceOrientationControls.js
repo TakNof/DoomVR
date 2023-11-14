@@ -37,9 +37,9 @@ THREE.DeviceOrientationControls = function ( object ) {
 
 		var q1 = new THREE.Quaternion( - Math.sqrt( 0.5 ), 0, 0, Math.sqrt( 0.5 ) ); // - PI/2 around the x-axis
 
-		return function ( quaternion, alpha, beta, gamma, orient ) {
+		return function ( quaternion, orient ) {
 			
-			euler.set( beta, alpha, - gamma, 'YXZ' ); // 'ZXY' for the device, but 'YXZ' for us
+			euler.set( scope.beta, scope.alpha, - scope.gamma, 'YXZ' ); // 'ZXY' for the device, but 'YXZ' for us
 
 			quaternion.setFromEuler( euler ); // orient the this.device
 
@@ -101,15 +101,15 @@ THREE.DeviceOrientationControls = function ( object ) {
 
 		if ( device ) {
 
-			var alpha = device.alpha ? THREE.MathUtils.degToRad( device.alpha ) + scope.alphaOffset : 0; // Z
+			scope.alpha = device.alpha ? THREE.MathUtils.degToRad( device.alpha ) + scope.alphaOffset : 0; // Z
 
-			var beta = device.beta ? THREE.MathUtils.degToRad( device.beta ) : 0; // X'
+			scope.beta = device.beta ? THREE.MathUtils.degToRad( device.beta ) : 0; // X'
 
-			var gamma = device.gamma ? THREE.MathUtils.degToRad( device.gamma ) : 0; // Y''
+			scope.gamma = device.gamma ? THREE.MathUtils.degToRad( device.gamma ) : 0; // Y''
 
 			var orient = scope.screenOrientation ? THREE.MathUtils.degToRad( scope.screenOrientation ) : 0; // O
 
-			setObjectQuaternion( scope.object.quaternion, alpha, beta, gamma, orient );
+			setObjectQuaternion( scope.object.quaternion, orient );
 
 		}
 	};
