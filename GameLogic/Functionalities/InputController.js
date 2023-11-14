@@ -158,6 +158,8 @@ class InputController{
         
         if(this.giroscopeControls.device == null){
             this.giroscopeControls.enabled = false;
+        }else{
+            this.giroscopeControls.enabled = true;
         }
     }
 
