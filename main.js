@@ -43,10 +43,12 @@ player.setCamera(75, 90, window.innerWidth / window.innerHeight, 0.1, 1000);
 player.setWeaponObject([1, player.object.geometry.parameters.height*0.5, -2]);
 player.object.createPhysics(scene, {});
 
-// const stereoEffect = new StereoEffect(renderer);
-// stereoEffect.eyeSeparation = 0.06;
+if(player.input.giroscopeControls.enabled){
+    const stereoEffect = new StereoEffect(renderer);
+    stereoEffect.eyeSeparation = 0.06;
 
-// currentRenderer = stereoEffect;
+    currentRenderer = stereoEffect;
+}
 
 let mapSize = {width: 50, depth: 50, height: 10};
 let wallSize = {width: 5, depth:5, height: mapSize.height};
@@ -119,13 +121,6 @@ function animate() {
         if(player.object.position.y < -20){
             player.object.position.y = 10;
             player.object.physics.config.velocityVector.y = 0;
-        }
-
-        if(player.input.giroscopeControls.enabled && !stereoEffect){
-            const stereoEffect = new StereoEffect(renderer);
-            stereoEffect.eyeSeparation = 0.06;
-        
-            currentRenderer = stereoEffect;
         }
     }
     // giroscopeControls.update();
