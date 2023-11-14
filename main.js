@@ -43,13 +43,6 @@ player.setCamera(75, 90, window.innerWidth / window.innerHeight, 0.1, 1000);
 player.setWeaponObject([1, player.object.geometry.parameters.height*0.5, -2]);
 player.object.createPhysics(scene, {});
 
-if(player.input.giroscopeControls.enabled){
-    const stereoEffect = new StereoEffect(renderer);
-    stereoEffect.eyeSeparation = 0.06;
-
-    currentRenderer = stereoEffect;
-}
-
 // const stereoEffect = new StereoEffect(renderer);
 // stereoEffect.eyeSeparation = 0.06;
 
@@ -126,6 +119,13 @@ function animate() {
         if(player.object.position.y < -20){
             player.object.position.y = 10;
             player.object.physics.config.velocityVector.y = 0;
+        }
+
+        if(player.input.giroscopeControls.enabled && !stereoEffect){
+            const stereoEffect = new StereoEffect(renderer);
+            stereoEffect.eyeSeparation = 0.06;
+        
+            currentRenderer = stereoEffect;
         }
     }
     // giroscopeControls.update();
