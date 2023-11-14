@@ -68,7 +68,19 @@ class Living{
         return this.defaultVelocity;
     }
 
+    calculateQuaterion(yRotation, xRotation){
+        const qx = new THREE.Quaternion();
+        qx.setFromAxisAngle(new THREE.Vector3(0,1,0), yRotation);
 
+        const qz = new THREE.Quaternion();
+        qz.setFromAxisAngle(new THREE.Vector3(1,0,0), xRotation);
+
+        const q = new THREE.Quaternion();
+        q.multiply(qx);
+        q.multiply(qz);
+
+        return q;
+    }
     /**
      * This method created the raycaster object of the sprite.
      * @param {number} raysAmount The amount of rays that the raycaster should calculate.

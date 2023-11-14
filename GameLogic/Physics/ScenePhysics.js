@@ -50,11 +50,17 @@ class ScenePhysics{
         this.items.forEach((item) =>{
             if(item.physics){
                 item.physics.move();
+
+                if(this.bounds && item.position.length() > this.bounds){
+                    this.remove(item);
+                }
             }
         });
 
         this.config.delta = divisor;
         this.config.currentTime += divisor;
+
+        
     }
 
     remove(item){
@@ -63,8 +69,13 @@ class ScenePhysics{
             if(this.items[index].physics.arrowHelper){
                 this.scene.remove(this.items[index].physics.arrowHelper);
             }
+            this.scene.remove(item);
             this.items.splice(index, 1);
         }
+    }
+
+    setBounds(bounds){
+        this.bounds = bounds;
     }
 
     checkWorldCollisions(){

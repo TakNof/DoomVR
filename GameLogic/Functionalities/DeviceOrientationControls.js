@@ -110,12 +110,11 @@ THREE.DeviceOrientationControls = function ( player ) {
 
 			var orient = scope.screenOrientation ? THREE.MathUtils.degToRad( scope.screenOrientation ) : 0; // O
 
-			scope.player.angles.phi = beta;
+			// scope.player.angles.phi = beta;
 
-			scope.player.angles.theta = alpha;
+			// scope.player.angles.theta = alpha;
 			
 			setObjectQuaternion( scope.player.object.quaternion, alpha, beta, gamma, orient );
-
 		}
 	};
 

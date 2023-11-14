@@ -119,7 +119,7 @@ class Player extends Living{
      * @param {[...Number]} Position
      */
     setWeaponObject(position = [0,0,0]){
-        this.weaponObject = new ShapeGenerator("Box", [0.5, 0.5, 2], "Standard");
+        this.weaponObject = new ShapeGenerator("Box", [0.5, 0.5, 2], "Standard", {transparent: true, opacity: 0.2});
         this.object.add(this.weaponObject);
 
         this.weaponObject.defaultPosition = new THREE.Vector3().fromArray(position);
@@ -373,17 +373,7 @@ class Player extends Living{
             this.angles.phi += -xh * 1;
             this.angles.theta = this.clamp(this.angles.theta + -yh * 1, -Math.PI/3, Math.PI/3);
 
-            const qx = new THREE.Quaternion();
-            qx.setFromAxisAngle(new THREE.Vector3(0,1,0), this.angles.phi);
-
-            const qz = new THREE.Quaternion();
-            qz.setFromAxisAngle(new THREE.Vector3(1,0,0), this.angles.theta);
-
-            const q = new THREE.Quaternion();
-            q.multiply(qx);
-            q.multiply(qz);
-
-            this.object.quaternion.copy(q);
+            this.object.quaternion.copy(this.calculateQuaterion(this.angles.phi, this.angles.theta));
         }
     }
 
@@ -398,8 +388,6 @@ class Player extends Living{
     movement(delta){
         this.updateTranslation(delta);
         this.updateRotation(delta);
-
-        console.log(this.angles);
     }
 
     jump(delta){
@@ -422,9 +410,12 @@ class Player extends Living{
             
             let time = this.scene.scenePhysics.config.currentTime;
 
-            if (time - this.getLastShotTimer() > 0.05) {
+            if (time - this.getLastShotTimer() > 0.01) {
                 let projectileVelocity = new THREE.Vector3(0,0,-0.1).applyEuler(this.object.rotation);
-                let initialPosition = this.object.position.clone().add(this.weaponObject.position);
+                // let initialPosition = this.object.position.clone().add(this.weaponObject.position.clone().add(new THREE.Vector3(0,0,-1).applyEuler(this.object.rotation)));
+
+                let initialPosition = this.object.position.clone().add(this.weaponObject.position.clone().applyEuler(this.object.rotation));
+                initialPosition.add(new THREE.Vector3(0,0,-this.weaponObject.geometry.parameters.depth).applyEuler(this.object.rotation));
 
                 let projectile = new ShapeGenerator("Sphere", [0.1, 16, 32], "Standard", {color: 0xFF00FF0, roughness: 0});
                 projectile.position.copy(initialPosition);

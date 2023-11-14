@@ -156,10 +156,9 @@ class InputController{
     createGiroscope(giroscopeObject){
         this.giroscopeControls =  new THREE.DeviceOrientationControls(giroscopeObject);
         
-        // if(this.giroscopeControls.device == null){
-        //     this.giroscopeControls.enabled = false;
-        // }
-        
+        if(this.giroscopeControls.device == null){
+            this.giroscopeControls.enabled = false;
+        }
     }
 
     update(){
@@ -172,7 +171,6 @@ class InputController{
         }
 
         if(this.giroscopeControls.enabled){
-            console.log("updating giroscope");
             this.giroscopeControls.update();
         }
     }

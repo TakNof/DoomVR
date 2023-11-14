@@ -10,6 +10,7 @@ import ProceduralMapGenerator from "./GameLogic/Functionalities/ProceduralMapGen
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
 import { StereoEffect } from 'three/addons/effects/StereoEffect.js';
+import { Shape } from "three";
 
 const scene = new THREE.Scene();
 const renderer = new THREE.WebGLRenderer();
@@ -60,6 +61,8 @@ let map = new ProceduralMapGenerator(scene, mapSize, wallSize);
 map.setWalls(20);
 map.create();
 
+scene.scenePhysics.setBounds(Math.hypot(mapSize.width, mapSize.depth, mapSize.height));
+
 camera.position.z = 3;
 camera.position.x = 2;
 camera.position.y = 1;
@@ -67,7 +70,6 @@ camera.position.y = 1;
 let target;
 
 player.object.add(camera);
-
 
 let light = createLight(0xFFFFFF, 1, {x: 0, y: 50, z: 0});
 scene.add(light);
