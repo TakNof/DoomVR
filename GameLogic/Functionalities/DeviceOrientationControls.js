@@ -98,6 +98,8 @@ THREE.DeviceOrientationControls = function ( player ) {
 
 		scope.device = scope.deviceOrientation;
 
+		console.log(scope.device);
+
 		if ( scope.device ) {
 
 			var alpha = scope.device.alpha ? THREE.MathUtils.degToRad( scope.device.alpha ) + scope.alphaOffset : 0; // Z
