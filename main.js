@@ -54,8 +54,6 @@ if(player.input.giroscopeControls.enabled){
 
 // currentRenderer = stereoEffect;
 
-let giroscopeControls = new THREE.DeviceOrientationControls(player.object);
-
 let mapSize = {width: 50, depth: 50, height: 10};
 let wallSize = {width: 5, depth:5, height: mapSize.height};
 let map = new ProceduralMapGenerator(scene, mapSize, wallSize);
