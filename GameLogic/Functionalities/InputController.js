@@ -38,7 +38,7 @@ class InputController{
             this.keyCodesFromCode[i] = char;
         }
 
-        this.createGiroscope(giroscopeObject);
+        // this.createGiroscope(giroscopeObject);
 
         let events = ["MouseDown", "MouseUp", "MouseMove", "KeyDown", "KeyUp"];
 
@@ -154,21 +154,27 @@ class InputController{
     }
 
     createGiroscope(giroscopeObject){
-        this.giroscopeControls =  new THREE.DeviceOrientationControls(giroscopeObject);
-
+        // this.giroscopeControls =  new THREE.DeviceOrientationControls(giroscopeObject);
+    
+        /*
         if(this.giroscopeControls.device == null){
             this.giroscopeControls.enabled = false;
         }
+        */
     }
 
     update(){
         this.previous = JSON.parse(JSON.stringify(this.current));
         this.checkGamepad();
         this.gamepadController();
+    
+        // if(!this.giroscopeControls){
+        //     this.createGiroscope(giroscopeObject);
+        // }
 
-        if(this.giroscopeControls.enabled){
-            this.giroscopeControls.update();
-        }
+        // if(this.giroscopeControls.enabled){
+        //     this.giroscopeControls.update();
+        // }
     }
 }
 

@@ -5,7 +5,6 @@ console.warn( "THREE.DeviceOrientationControls: As part of the transition to ES6
  */
 
 THREE.DeviceOrientationControls = function ( object ) {
-
 	var scope = this;
 
 	this.object = object;
@@ -19,14 +18,11 @@ THREE.DeviceOrientationControls = function ( object ) {
 	this.alphaOffset = 0; // radians
 
 	var onDeviceOrientationChangeEvent = function ( event ) {
-
 		scope.deviceOrientation = event;
 	};
 
 	var onScreenOrientationChangeEvent = function () {
-
 		scope.screenOrientation = window.orientation || 0;
-
 	};
 
 	// The angles alpha, beta and gamma form a set of intrinsic Tait-Bryan angles of type Z-X'-Y''
@@ -42,8 +38,8 @@ THREE.DeviceOrientationControls = function ( object ) {
 		var q1 = new THREE.Quaternion( - Math.sqrt( 0.5 ), 0, 0, Math.sqrt( 0.5 ) ); // - PI/2 around the x-axis
 
 		return function ( quaternion, alpha, beta, gamma, orient ) {
-
-			euler.set( beta, alpha, - gamma, 'YXZ' ); // 'ZXY' for the this.device, but 'YXZ' for us
+			
+			euler.set( beta, alpha, - gamma, 'YXZ' ); // 'ZXY' for the device, but 'YXZ' for us
 
 			quaternion.setFromEuler( euler ); // orient the this.device
 
@@ -73,7 +69,6 @@ THREE.DeviceOrientationControls = function ( object ) {
 				}
 
 			} ).catch( function ( error ) {
-                this.device = null;
 				console.error( 'THREE.DeviceOrientationControls: Unable to use DeviceOrientation API:', error );
 
 			} );
@@ -102,23 +97,21 @@ THREE.DeviceOrientationControls = function ( object ) {
 
 		if ( scope.enabled === false ) return;
 
-		this.device = scope.deviceOrientation;
+		var device = scope.deviceOrientation;
 
-		if ( this.device ) {
+		if ( device ) {
 
-			var alpha = this.device.alpha ? THREE.MathUtils.degToRad( this.device.alpha ) + scope.alphaOffset : 0; // Z
+			var alpha = device.alpha ? THREE.MathUtils.degToRad( device.alpha ) + scope.alphaOffset : 0; // Z
 
-			var beta = this.device.beta ? THREE.MathUtils.degToRad( this.device.beta ) : 0; // X'
+			var beta = device.beta ? THREE.MathUtils.degToRad( device.beta ) : 0; // X'
 
-			var gamma = this.device.gamma ? THREE.MathUtils.degToRad( this.device.gamma ) : 0; // Y''
+			var gamma = device.gamma ? THREE.MathUtils.degToRad( device.gamma ) : 0; // Y''
 
 			var orient = scope.screenOrientation ? THREE.MathUtils.degToRad( scope.screenOrientation ) : 0; // O
 
 			setObjectQuaternion( scope.object.quaternion, alpha, beta, gamma, orient );
 
 		}
-
-
 	};
 
 	this.dispose = function () {

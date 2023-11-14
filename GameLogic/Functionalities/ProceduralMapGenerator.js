@@ -217,6 +217,8 @@ class ProceduralMapGenerator{
                 cube.position.x = i * this.getBuildingsSize().width - this.getCitySize().width/2;
                 cube.position.z = j * this.getBuildingsSize().depth - this.getCitySize().depth/2;
                 cube.position.y = cube.geometry.parameters.height/2;
+                cube.castShadow = true;
+                cube.receiveShadow = true;
                 this.#items.push(cube);
                 this.getScene().add(cube);
             }

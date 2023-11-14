@@ -403,7 +403,7 @@ class Player extends Living{
         
         if(this.object.physics.getPotentialEnergy() < 10 && jumpAction == 1){
             
-            const jumpAmount = new THREE.Vector3(0,1,0).multiplyScalar(jumpAction * delta * this.defaultVelocity*2);
+            const jumpAmount = new THREE.Vector3(0,1,0).multiplyScalar(jumpAction * delta * this.camera.sprintingMultiplier*6);
 
             this.object.physics.config.velocityVector.y = jumpAmount.y;
         }

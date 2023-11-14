@@ -20,6 +20,9 @@ class Living{
     constructor(scene, originInfo, spriteImgStr, defaultVelocity){
         this.object = new ShapeGenerator("Box", [1,2,1], "Standard");
         this.object.position.fromArray(originInfo);
+
+        this.object.castShadow = true;
+        this.object.receiveShadow = true;
         
         this.angles = {phi: 0, theta: 0};
 

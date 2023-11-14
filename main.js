@@ -1,4 +1,4 @@
-import * as THREE from "three";
+// import * as THREE from "three";
 
 import ShapeGenerator from "./ShapeGenerator.js";
 import ScenePhysics from "./GameLogic/Physics/ScenePhysics.js";
@@ -42,17 +42,24 @@ player.setCamera(75, 90, window.innerWidth / window.innerHeight, 0.1, 1000);
 player.setWeaponObject([1, player.object.geometry.parameters.height*0.5, -2]);
 player.object.createPhysics(scene, {});
 
-if(player.input.giroscopeControls.enabled){
-    const stereoEffect = new StereoEffect(renderer);
-    stereoEffect.eyeSeparation = 0.06;
+// if(player.input.giroscopeControls.enabled){
+//     const stereoEffect = new StereoEffect(renderer);
+//     stereoEffect.eyeSeparation = 0.06;
 
-    currentRenderer = stereoEffect;
-}
+//     currentRenderer = stereoEffect;
+// }
 
-let mapSize = {width: 200, depth: 200, height: 10};
+const stereoEffect = new StereoEffect(renderer);
+stereoEffect.eyeSeparation = 0.06;
+
+currentRenderer = stereoEffect;
+
+let giroscopeControls = new THREE.DeviceOrientationControls(player.object);
+
+let mapSize = {width: 50, depth: 50, height: 10};
 let wallSize = {width: 5, depth:5, height: mapSize.height};
 let map = new ProceduralMapGenerator(scene, mapSize, wallSize);
-map.setWalls(50);
+map.setWalls(20);
 map.create();
 
 camera.position.z = 3;
@@ -115,7 +122,13 @@ function animate() {
         player.update(clock.getDelta()*2);
         scene.scenePhysics.checkWorldCollisions();
         scene.scenePhysics.update(clock.getDelta()*0.5);
+
+        if(player.object.position.y < -20){
+            player.object.position.y = 10;
+            player.object.physics.config.velocityVector.y = 0;
+        }
     }
+    giroscopeControls.update();
 }
 animate();
 
