@@ -119,7 +119,7 @@ class Player extends Living{
      * @param {[...Number]} Position
      */
     setWeaponObject(position = [0,0,0]){
-        this.weaponObject = new ShapeGenerator("Box", [0.5, 0.5, 2], "Standard", {transparent: true, opacity: 0.2});
+        this.weaponObject = new ShapeGenerator("Box", [0.5, 0.5, 2], "Standard");
         this.object.add(this.weaponObject);
 
         this.weaponObject.defaultPosition = new THREE.Vector3().fromArray(position);
