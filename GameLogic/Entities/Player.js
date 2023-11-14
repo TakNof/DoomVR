@@ -333,7 +333,7 @@ class Player extends Living{
         this.camera.updateProjectionMatrix();
 
         const qx = new THREE.Quaternion();
-        qx.setFromAxisAngle(new THREE.Vector3(0,1,0), this.angles.phi);
+        qx.setFromAxisAngle(new THREE.Vector3(0,1,0), this.object.rotation.y);
 
         const forward = new THREE.Vector3(0,0,-1);
         forward.applyQuaternion(qx);
