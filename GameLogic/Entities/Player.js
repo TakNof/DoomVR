@@ -384,9 +384,6 @@ class Player extends Living{
             q.multiply(qz);
 
             this.object.quaternion.copy(q);
-        }else{
-            this.angles.phi = this.input.giroscopeControls.alpha;
-            this.angles.theta = this.input.giroscopeControls.beta;
         }
     }
 
