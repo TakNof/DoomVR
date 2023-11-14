@@ -42,17 +42,17 @@ player.setCamera(75, 90, window.innerWidth / window.innerHeight, 0.1, 1000);
 player.setWeaponObject([1, player.object.geometry.parameters.height*0.5, -2]);
 player.object.createPhysics(scene, {});
 
-// if(player.input.giroscopeControls.enabled){
-//     const stereoEffect = new StereoEffect(renderer);
-//     stereoEffect.eyeSeparation = 0.06;
+if(player.input.giroscopeControls.enabled){
+    const stereoEffect = new StereoEffect(renderer);
+    stereoEffect.eyeSeparation = 0.06;
 
-//     currentRenderer = stereoEffect;
-// }
+    currentRenderer = stereoEffect;
+}
 
-const stereoEffect = new StereoEffect(renderer);
-stereoEffect.eyeSeparation = 0.06;
+// const stereoEffect = new StereoEffect(renderer);
+// stereoEffect.eyeSeparation = 0.06;
 
-currentRenderer = stereoEffect;
+// currentRenderer = stereoEffect;
 
 let giroscopeControls = new THREE.DeviceOrientationControls(player.object);
 
@@ -128,7 +128,7 @@ function animate() {
             player.object.physics.config.velocityVector.y = 0;
         }
     }
-    giroscopeControls.update();
+    // giroscopeControls.update();
 }
 animate();
 

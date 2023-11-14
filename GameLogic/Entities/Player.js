@@ -395,7 +395,7 @@ class Player extends Living{
      */
     movement(delta){
         this.updateTranslation(delta);
-        this.updateRotation(delta);
+        // this.updateRotation(delta);
     }
 
     jump(delta){
