@@ -1,5 +1,3 @@
-console.warn( "THREE.DeviceOrientationControls: As part of the transition to ES6 Modules, the files in 'examples/js' were deprecated in May 2020 (r117) and will be deleted in December 2020 (r124). You can find more information about developing using ES6 Modules in https://threejs.org/docs/#manual/en/introduction/Installation." );
-
 /**
  * W3C Device Orientation control (http://w3c.github.io/deviceorientation/spec-source-orientation.html)
  */
@@ -109,9 +107,16 @@ THREE.DeviceOrientationControls = function ( player ) {
 
 			var orient = scope.screenOrientation ? THREE.MathUtils.degToRad( scope.screenOrientation ) : 0; // O
 
+			console.log(scope.player.angles.phi);
 			scope.player.angles.phi = beta;
-			scope.player.angles.theta = alpha;
+			console.log(scope.player.angles.phi);
+			debugger;
 
+			console.log(scope.player.angles.theta);
+			scope.player.angles.theta = alpha;
+			console.log(scope.player.angles.theta);
+			debugger;
+			
 			setObjectQuaternion( scope.player.object.quaternion, alpha, beta, gamma, orient );
 
 		}

@@ -172,6 +172,7 @@ class InputController{
         }
 
         if(this.giroscopeControls.enabled){
+            console.log("updating giroscope");
             this.giroscopeControls.update();
         }
     }

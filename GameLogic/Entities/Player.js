@@ -398,6 +398,8 @@ class Player extends Living{
     movement(delta){
         this.updateTranslation(delta);
         this.updateRotation(delta);
+
+        console.log(this.angles);
     }
 
     jump(delta){
