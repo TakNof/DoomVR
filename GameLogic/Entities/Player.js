@@ -25,7 +25,7 @@ class Player extends Living{
     constructor(scene, originInfo, spriteImgStr, defaultVelocity, cameraSensibility, maxHealth){
         super(scene, originInfo, spriteImgStr, defaultVelocity);
 
-        this.input = new InputController(this.object, cameraSensibility);
+        this.input = new InputController(this, cameraSensibility);
 
         this.setMaxHealth(maxHealth);
 

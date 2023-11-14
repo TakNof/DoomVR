@@ -4,11 +4,11 @@ console.warn( "THREE.DeviceOrientationControls: As part of the transition to ES6
  * W3C Device Orientation control (http://w3c.github.io/deviceorientation/spec-source-orientation.html)
  */
 
-THREE.DeviceOrientationControls = function ( object ) {
+THREE.DeviceOrientationControls = function ( player ) {
 	var scope = this;
 
-	this.object = object;
-	this.object.rotation.reorder( 'YXZ' );
+	this.player = player;
+	this.player.object.rotation.reorder( 'YXZ' );
 
 	this.enabled = true;
 
@@ -37,9 +37,9 @@ THREE.DeviceOrientationControls = function ( object ) {
 
 		var q1 = new THREE.Quaternion( - Math.sqrt( 0.5 ), 0, 0, Math.sqrt( 0.5 ) ); // - PI/2 around the x-axis
 
-		return function ( quaternion, orient ) {
+		return function ( quaternion, alpha, beta, gamma, orient ) {
 			
-			euler.set( scope.beta, scope.alpha, - scope.gamma, 'YXZ' ); // 'ZXY' for the device, but 'YXZ' for us
+			euler.set( beta, alpha, - gamma, 'YXZ' ); // 'ZXY' for the device, but 'YXZ' for us
 
 			quaternion.setFromEuler( euler ); // orient the this.device
 
@@ -101,15 +101,18 @@ THREE.DeviceOrientationControls = function ( object ) {
 
 		if ( device ) {
 
-			scope.alpha = device.alpha ? THREE.MathUtils.degToRad( device.alpha ) + scope.alphaOffset : 0; // Z
+			var alpha = device.alpha ? THREE.MathUtils.degToRad( device.alpha ) + scope.alphaOffset : 0; // Z
 
-			scope.beta = device.beta ? THREE.MathUtils.degToRad( device.beta ) : 0; // X'
+			var beta = device.beta ? THREE.MathUtils.degToRad( device.beta ) : 0; // X'
 
-			scope.gamma = device.gamma ? THREE.MathUtils.degToRad( device.gamma ) : 0; // Y''
+			var gamma = device.gamma ? THREE.MathUtils.degToRad( device.gamma ) : 0; // Y''
 
 			var orient = scope.screenOrientation ? THREE.MathUtils.degToRad( scope.screenOrientation ) : 0; // O
 
-			setObjectQuaternion( scope.object.quaternion, orient );
+			scope.player.angles.phi = beta;
+			scope.player.angles.theta = alpha;
+
+			setObjectQuaternion( scope.player.object.quaternion, alpha, beta, gamma, orient );
 
 		}
 	};
